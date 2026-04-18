@@ -1,0 +1,62 @@
+[
+  {
+    "id": 1,
+    "lat": 22.5726,
+    "lng": 88.3639,
+    "title": "Suspicious Activity",
+    "description": "Unusual movement detected near Howrah Bridge corridor. Multiple unidentified individuals observed at 02:34 IST.",
+    "image": "images/sample1.jpg",
+    "severity": "high",
+    "timestamp": "2026-04-18T02:34:00"
+  },
+  {
+    "id": 2,
+    "lat": 28.7041,
+    "lng": 77.1025,
+    "title": "Vehicle Tracking",
+    "description": "Unmarked black SUV spotted entering restricted zone near Delhi cantonment. License plate does not match any registered database.",
+    "image": "images/sample2.jpg",
+    "severity": "critical",
+    "timestamp": "2026-04-18T05:12:00"
+  },
+  {
+    "id": 3,
+    "lat": 19.0760,
+    "lng": 72.8777,
+    "title": "Harbor Surveillance",
+    "description": "Unscheduled cargo vessel detected at Mumbai port. Manifests do not match port authority records.",
+    "image": "images/sample3.jpg",
+    "severity": "medium",
+    "timestamp": "2026-04-17T22:15:00"
+  },
+  {
+    "id": 4,
+    "lat": 13.0827,
+    "lng": 80.2707,
+    "title": "Crowd Monitoring",
+    "description": "Large unauthorized gathering detected in southern Chennai via thermal imaging. Estimated 400+ individuals.",
+    "image": "images/sample4.jpg",
+    "severity": "low",
+    "timestamp": "2026-04-18T18:45:00"
+  },
+  {
+    "id": 5,
+    "lat": 26.9124,
+    "lng": 75.7873,
+    "title": "Perimeter Breach",
+    "description": "Fence breach detected at Jaipur military installation sector 7-G. Motion sensors triggered at 03:08 IST.",
+    "image": "images/sample5.jpg",
+    "severity": "critical",
+    "timestamp": "2026-04-18T03:08:00"
+  },
+  {
+    "id": 6,
+    "lat": 15.3173,
+    "lng": 75.7139,
+    "title": "Airstrip Recon",
+    "description": "Satellite imagery reveals unreported aircraft activity at remote airstrip near Hubli. Two light aircraft identified.",
+    "image": "images/sample6.jpg",
+    "severity": "high",
+    "timestamp": "2026-04-17T14:22:00"
+  }
+]
