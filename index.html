@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Fusion Dashboard — Real-time geospatial intelligence and surveillance monitoring platform.">
+  <title>Fusion Dashboard — Geospatial Intelligence</title>
+
+  <!-- Leaflet CSS -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+    integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY="
+    crossorigin="" />
+
+  <!-- App CSS -->
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <div class="dashboard" id="dashboard">
+
+    <!-- ── Sidebar ─────────────────────────────────── -->
+    <aside class="sidebar" id="sidebar">
+      <div class="sidebar-header">
+        <div class="logo-row">
+          <div class="logo-icon">🛰</div>
+          <span class="logo-text">Fusion Dashboard</span>
+        </div>
+        <div class="logo-subtitle">geospatial intel</div>
+      </div>
+
+      <div class="stats-bar" id="stats-bar">
+        <!-- stats injected by JS -->
+      </div>
+
+      <div class="feed-header">Live Incident Feed</div>
+      <div class="feed" id="feed">
+        <!-- feed cards injected by JS -->
+      </div>
+    </aside>
+
+    <!-- ── Map ─────────────────────────────────────── -->
+    <main class="map-wrapper">
+      <div class="map-title-overlay">
+        <span class="live-dot"></span>
+        <span class="map-title-text">Live Monitoring — 6 Active Incidents</span>
+      </div>
+      <div id="map"></div>
+    </main>
+
+  </div>
+
+  <!-- Leaflet JS -->
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+    integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="
+    crossorigin=""></script>
+
+  <!-- App JS -->
+  <script src="script.js"></script>
+</body>
+</html>
