@@ -13,6 +13,7 @@ const MARKERS_DATA = [
       "Unusual movement detected near Howrah Bridge corridor. Multiple unidentified individuals observed at 02:34 IST.",
     image: "images/sample1.jpg",
     severity: "high",
+    status: "estimated",
     timestamp: "2026-04-18T02:34:00",
   },
   {
@@ -24,6 +25,7 @@ const MARKERS_DATA = [
       "Unmarked black SUV spotted entering restricted zone near Delhi cantonment. License plate does not match any registered database.",
     image: "images/sample2.jpg",
     severity: "critical",
+    status: "verified",
     timestamp: "2026-04-18T05:12:00",
   },
   {
@@ -35,6 +37,7 @@ const MARKERS_DATA = [
       "Unscheduled cargo vessel detected at Mumbai port. Manifests do not match port authority records.",
     image: "images/sample3.jpg",
     severity: "medium",
+    status: "estimated",
     timestamp: "2026-04-17T22:15:00",
   },
   {
@@ -46,6 +49,7 @@ const MARKERS_DATA = [
       "Large unauthorized gathering detected in southern Chennai via thermal imaging. Estimated 400+ individuals.",
     image: "images/sample4.jpg",
     severity: "low",
+    status: "verified",
     timestamp: "2026-04-18T18:45:00",
   },
   {
@@ -57,6 +61,7 @@ const MARKERS_DATA = [
       "Fence breach detected at Jaipur military installation sector 7-G. Motion sensors triggered at 03:08 IST.",
     image: "images/sample5.jpg",
     severity: "critical",
+    status: "verified",
     timestamp: "2026-04-18T03:08:00",
   },
   {
@@ -68,6 +73,7 @@ const MARKERS_DATA = [
       "Satellite imagery reveals unreported aircraft activity at remote airstrip near Hubli. Two light aircraft identified.",
     image: "images/sample6.jpg",
     severity: "high",
+    status: "estimated",
     timestamp: "2026-04-17T14:22:00",
   },
 ];
@@ -116,12 +122,13 @@ L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
 }).addTo(map);
 
 // ── Create custom marker icon ──────────────────────────
-function createMarkerIcon(severity) {
+function createMarkerIcon(severity, status) {
+  const estimatedClass = status === "estimated" ? "estimated" : "";
   return L.divIcon({
-    className: "custom-marker",
+    className: `custom-marker ${estimatedClass}`,
     html: `
-      <div class="marker-pulse ${severity}"></div>
-      <div class="marker-pin ${severity}">${SEVERITY_ICONS[severity]}</div>
+      <div class="marker-pulse ${severity} ${estimatedClass}"></div>
+      <div class="marker-pin ${severity} ${estimatedClass}">${SEVERITY_ICONS[severity]}</div>
     `,
     iconSize: [32, 40],
     iconAnchor: [16, 40],
@@ -131,13 +138,18 @@ function createMarkerIcon(severity) {
 
 // ── Create popup HTML ──────────────────────────────────
 function createPopupHTML(item) {
+  const statusIcon = item.status === "verified" ? "✔" : "◎";
+  const statusLabel = item.status === "verified" ? "Verified" : "Estimated";
   return `
     <div class="popup-content">
       <img class="popup-image" src="${item.image}" alt="${item.title}" loading="lazy" />
       <div class="popup-body">
         <div class="popup-title-row">
           <span class="popup-title">${item.title}</span>
-          <span class="severity-badge ${item.severity}">${item.severity}</span>
+          <div class="popup-badges">
+            <span class="status-badge ${item.status}">${statusIcon} ${statusLabel}</span>
+            <span class="severity-badge ${item.severity}">${item.severity}</span>
+          </div>
         </div>
         <p class="popup-desc">${item.description}</p>
         <div class="popup-footer">
@@ -154,7 +166,7 @@ const markersMap = {};
 
 MARKERS_DATA.forEach((item) => {
   const marker = L.marker([item.lat, item.lng], {
-    icon: createMarkerIcon(item.severity),
+    icon: createMarkerIcon(item.severity, item.status),
     title: item.title,
   }).addTo(map);
 
@@ -175,11 +187,15 @@ MARKERS_DATA.forEach((item) => {
 
 // ── Build Stats Bar ────────────────────────────────────
 function buildStatsBar() {
-  const counts = { critical: 0, high: 0, medium: 0, low: 0 };
-  MARKERS_DATA.forEach((d) => counts[d.severity]++);
+  const severityCounts = { critical: 0, high: 0, medium: 0, low: 0 };
+  const statusCounts = { verified: 0, estimated: 0 };
+  MARKERS_DATA.forEach((d) => {
+    severityCounts[d.severity]++;
+    statusCounts[d.status]++;
+  });
 
   const statsBar = document.getElementById("stats-bar");
-  statsBar.innerHTML = Object.entries(counts)
+  const severityChips = Object.entries(severityCounts)
     .map(
       ([key, val]) => `
       <div class="stat-chip ${key}">
@@ -189,6 +205,23 @@ function buildStatsBar() {
     `
     )
     .join("");
+
+  const statusChips = `
+    <div class="stat-chip verified-chip">
+      <div class="stat-count" style="color: #22c55e">✔ ${statusCounts.verified}</div>
+      <div class="stat-label">Verified</div>
+    </div>
+    <div class="stat-chip estimated-chip">
+      <div class="stat-count" style="color: #a78bfa">◎ ${statusCounts.estimated}</div>
+      <div class="stat-label">Estimated</div>
+    </div>
+  `;
+
+  statsBar.innerHTML = severityChips;
+
+  // Inject status stats into the dedicated container
+  const statusBar = document.getElementById("status-bar");
+  if (statusBar) statusBar.innerHTML = statusChips;
 }
 
 // ── Build Feed Cards ───────────────────────────────────
@@ -203,19 +236,27 @@ function buildFeed() {
 
   feed.innerHTML = sorted
     .map(
-      (item) => `
-    <div class="feed-card ${item.severity}" data-id="${item.id}" id="feed-card-${item.id}">
+      (item) => {
+        const statusIcon = item.status === "verified" ? "✔" : "◎";
+        const statusLabel = item.status === "verified" ? "Verified" : "Estimated";
+        return `
+    <div class="feed-card ${item.severity} ${item.status}" data-id="${item.id}" id="feed-card-${item.id}">
       <div class="feed-card-top">
         <span class="feed-card-title">${item.title}</span>
-        <span class="severity-badge ${item.severity}">${item.severity}</span>
+        <div class="feed-card-badges">
+          <span class="status-badge-sm ${item.status}">${statusIcon}</span>
+          <span class="severity-badge ${item.severity}">${item.severity}</span>
+        </div>
       </div>
       <p class="feed-card-desc">${item.description}</p>
       <div class="feed-card-meta">
+        <span class="meta-item">${statusIcon} ${statusLabel}</span>
         <span class="meta-item">📍 ${item.lat.toFixed(2)}°, ${item.lng.toFixed(2)}°</span>
         <span class="meta-item">🕐 ${relativeTime(item.timestamp)}</span>
       </div>
     </div>
-  `
+  `;
+      }
     )
     .join("");
 
