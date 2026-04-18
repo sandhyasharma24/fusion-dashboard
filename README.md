@@ -12,7 +12,10 @@ A sleek, dark-themed web dashboard for real-time geospatial surveillance and inc
 - 📍 **Custom Markers** — Color-coded by severity (Critical / High / Medium / Low) with animated pulse rings
 - 🖼️ **Rich Popups** — Click or hover on markers to view incident image, title, severity badge, description, coordinates & timestamp
 - 📋 **Sidebar Feed** — Live incident cards sorted by severity, with click-to-fly-to-marker interaction
-- 📊 **Stats Bar** — At-a-glance severity count chips
+- 📊 **Stats Bar** — At-a-glance severity count chips and verified/estimated status counts
+- ✅ **Verified vs Estimated** — Visual distinction between confirmed and unconfirmed reports:
+  - **Verified** → Solid markers, full opacity, pulse animation
+  - **Estimated** → Semi-transparent markers, dashed border, no pulse
 - 🎨 **Glassmorphism UI** — Frosted glass sidebar and popups with smooth animations
 - 📱 **Responsive** — Adapts to mobile with a stacked layout
 
@@ -21,10 +24,19 @@ A sleek, dark-themed web dashboard for real-time geospatial surveillance and inc
 ## 📸 Screenshots
 
 ### Dashboard Overview
+Full dashboard with sidebar feed, severity & status stats, and interactive map markers.
+
 ![Dashboard Overview](screenshots/dashboard-overview.png)
 
-### Marker Popup Detail
-![Popup Detail](screenshots/popup-detail.png)
+### Verified Incident Popup
+Popup for a **Verified** incident showing green `✔ VERIFIED` badge alongside the severity badge.
+
+![Verified Popup](screenshots/popup-verified.png)
+
+### Estimated Incident Popup
+Popup for an **Estimated** incident showing purple `◎ ESTIMATED` badge with dashed border.
+
+![Estimated Popup](screenshots/popup-estimated.png)
 
 ---
 
@@ -73,7 +85,8 @@ fusion-dashboard/
 │   └── sample6.jpg
 ├── screenshots/        # App screenshots
 │   ├── dashboard-overview.png
-│   └── popup-detail.png
+│   ├── popup-verified.png
+│   └── popup-estimated.png
 └── README.md
 ```
 
@@ -92,6 +105,7 @@ Each marker in `data.json` follows this structure:
   "description": "Unusual movement detected near Howrah Bridge corridor.",
   "image": "images/sample1.jpg",
   "severity": "critical",
+  "status": "verified",
   "timestamp": "2026-04-18T02:34:00"
 }
 ```
@@ -104,7 +118,15 @@ Each marker in `data.json` follows this structure:
 | `description` | string | Detailed description |
 | `image` | string | Path to incident image |
 | `severity` | string | `critical` \| `high` \| `medium` \| `low` |
+| `status` | string | `verified` \| `estimated` |
 | `timestamp` | string | ISO 8601 timestamp |
+
+### Verified vs Estimated
+
+| Status | Map Marker | Feed Card | Popup Badge |
+|--------|-----------|-----------|-------------|
+| **Verified** | Solid, full opacity, pulse ring | Full opacity, ✔ icon | Green `✔ VERIFIED` |
+| **Estimated** | Semi-transparent, dashed border, no pulse | Muted opacity, ◎ icon | Purple `◎ ESTIMATED` (dashed) |
 
 ---
 
